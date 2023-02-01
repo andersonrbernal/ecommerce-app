@@ -2,16 +2,20 @@ import User from "../models/User.js"
 import jwt from 'jsonwebtoken'
 import { handleErrors } from "../libs/utilities/handleErrors.js"
 
-class AuthController {
-    static #createToken(id) {
-        return jwt.sign({ id }, process.env.SECRET, { expiresIn: '7d' });
-    }
+async function createToken(id) {
+    const token = jwt.sign({ id }, process.env.SECRET, { expiresIn: 259200000 });
+    return token
+}
 
+class AuthController {
     static async register_user(req, res) {
         try {
             const user = await new User(req.body).save()
             const { password: userPassword, ...otherDetails } = user._doc
-            res.status(200).json({ success: true, data: otherDetails })
+
+            const token = await createToken(user._doc._id)
+
+            res.status(200).json({ success: true, token: token, data: otherDetails })
             return
         } catch (error) {
             res.status(400).json({ success: false, errors: handleErrors(error) })
@@ -26,11 +30,10 @@ class AuthController {
             const user = await User.login(email, password)
             const { password: userPassword, ...otherDetails } = user._doc
 
-            // const token = this.#createToken(user._doc._id)
-            // const opt = { httpOnly: true }
+            const token = await createToken(user._doc._id)
 
-            // res.cookie('jwt', token, opt)
-            res.status(200).json({ success: true, data: otherDetails })
+
+            res.status(200).json({ success: true, token: token, data: otherDetails })
             return
         } catch (error) {
             res.status(400).json({ success: false, errors: handleErrors(error) })

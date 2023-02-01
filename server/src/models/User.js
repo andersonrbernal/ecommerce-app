@@ -27,6 +27,13 @@ async function login(email, password) {
 }
 
 const userStructure = {
+    username: {
+        type: String,
+        required: [true, "Please, enter a username."],
+        validate: [validator.isAlpha, "Please, enter a username with characters only."],
+        minLength: [4, "The username should be at least 4 characters long."],
+        maxLength: [255, "The username must not be over 255 characters long."],
+    },
     email: {
         type: String,
         unique: true,
@@ -40,11 +47,6 @@ const userStructure = {
         required: [true, "Please, enter a password."],
         minLength: [8, "The password must be at least 8 characters long."],
         maxLength: [255, "The password must not be over 255 characters long."]
-    },
-    username: {
-        type: String,
-        required: [true, "Please, enter a username."],
-        validate: [validator.isAlpha, "Please, enter a username with characters only."]
     },
     cart: {
         type: Array,

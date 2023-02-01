@@ -7,6 +7,7 @@ import userRoute from './routes/userRoute.js'
 import authRoute from './routes/authRoute.js'
 import cartRoute from './routes/cartRoute.js'
 import purchaseRoute from './routes/purchaseRoute.js'
+import { checkUser, requireAuth } from './libs/middlewares/authMiddleware.js'
 
 const app = express()
 

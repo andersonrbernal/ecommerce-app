@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.5
+  flutter_dotenv: ^5.0.2
+  flutter_session_manager: ^1.0.3
 
   cupertino_icons: ^1.0.2
 
@@ -27,6 +29,7 @@ flutter:
 
   assets:
     - assets/
+    - .env
 
   # fonts:
   #   - family: Schyler

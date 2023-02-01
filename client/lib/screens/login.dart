@@ -1,0 +1,101 @@
+import 'package:client/services/auth.dart';
+import 'package:flutter/material.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart';
+
+class Login extends StatefulWidget {
+  const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  String errorMessage = '';
+
+  String email = '';
+  String password = '';
+
+  Future<void> login() async {
+    errorMessage = '';
+
+    Map<String, String> requestBody = {'email': email, 'password': password};
+    Auth auth = Auth(endpoint: 'auth/login', requestBody: requestBody);
+    Response response = await auth.login();
+    Map<String, dynamic> data = await jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      Map errors = data['errors'];
+
+      setState(() {
+        errorMessage = errors.values.first;
+      });
+      print(errorMessage);
+      return;
+    }
+
+    print(response.statusCode);
+    return;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                Text('Login', style: TextStyle(fontSize: 30.0))
+              ]),
+              const SizedBox(height: 40.0),
+              Visibility(
+                  visible: true,
+                  child: Text(
+                    errorMessage,
+                    style: const TextStyle(color: Colors.red),
+                  )),
+              const SizedBox(height: 40.0),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                    hintText: 'Enter your email.'),
+              ),
+              const SizedBox(height: 20.0),
+              TextField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                      hintText: 'Password your email.')),
+              const SizedBox(height: 20.0),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/signup');
+                },
+                child: const Text('New User? Create an account',
+                    style: TextStyle(fontSize: 15.0)),
+              ),
+              MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      email = _emailController.value.text;
+                      password = _passwordController.value.text;
+                    });
+                    login();
+                  },
+                  color: Colors.blue,
+                  child: const Text('Login',
+                      style: TextStyle(fontSize: 16.0, color: Colors.white))),
+            ],
+          )),
+    );
+  }
+}

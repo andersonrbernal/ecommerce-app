@@ -1,16 +1,5 @@
 function handleErrors(err) {
-    let errors = {
-        data: "",
-        username: "",
-        email: "",
-        password: "",
-        phone: "",
-        address: "",
-        country: "",
-        city: "",
-        pincode: "",
-        addedon: "",
-    };
+    let errors = {}
 
     // duplicate error code
     const emailIsNotUnique = err.code === 11000;
@@ -29,6 +18,12 @@ function handleErrors(err) {
     if (passwordIsIncorrect) {
         errors.password = "That password is incorrect.";
         return errors;
+    }
+
+    const jwtIsNotValid = err.message === 'jwt malformed'
+    if (jwtIsNotValid) {
+        errors.data = 'Token is not valid'
+        return errors
     }
 
     // validation errors
