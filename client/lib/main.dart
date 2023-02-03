@@ -1,9 +1,10 @@
-import 'package:client/screens/home.dart';
+import 'package:client/screens/cart.dart';
 import 'package:client/screens/login.dart';
+import 'package:client/screens/product_list.dart';
+import 'package:client/screens/purchases.dart';
 import 'package:client/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 Future<void> main() async {
   await dotenv.load();
@@ -13,16 +14,17 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // dynamic user = await SessionManager().set('token', 'value');
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
       routes: {
-        '/': (context) => const Home(),
+        '/': (context) => const ProductList(),
         '/login': (context) => const Login(),
-        '/signup': (context) => const Signup()
+        '/signup': (context) => const Signup(),
+        '/cart': (context) => const Cart(),
+        '/purchases': (context) => const Purchases()
       },
     );
   }

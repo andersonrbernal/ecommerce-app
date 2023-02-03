@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:client/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart';
 
 class Signup extends StatefulWidget {
@@ -11,16 +12,19 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final _sessionManager = SessionManager();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  bool _loading = false;
   String errorMessage = '';
 
-  String username = '';
-  String email = '';
-  String password = '';
+  late String username;
+  late String email;
+  late String password;
 
-  Future<void> signup() async {
+  Future<void> signup(String username, String email, String password) async {
     errorMessage = '';
 
     Map<String, String> requestBody = {
@@ -33,17 +37,17 @@ class _SignupState extends State<Signup> {
     Response response = await auth.signup();
     Map<String, dynamic> data = await jsonDecode(response.body);
 
-    if (response.statusCode != 200) {
+    bool responseNotOk = response.statusCode != 200;
+    if (responseNotOk) {
       Map errors = data['errors'];
 
       setState(() {
         errorMessage = errors.values.first;
       });
-      print(errorMessage);
       return;
     }
 
-    print(response.statusCode);
+    await _sessionManager.set('token', data['token']);
     return;
   }
 
@@ -70,6 +74,7 @@ class _SignupState extends State<Signup> {
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(),
                     labelText: 'Username',
                     hintText: 'Enter your username.'),
@@ -78,14 +83,19 @@ class _SignupState extends State<Signup> {
               TextField(
                 controller: _emailController,
                 decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                     labelText: 'Email',
                     hintText: 'Enter your email.'),
               ),
               const SizedBox(height: 20.0),
               TextField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
                   controller: _passwordController,
                   decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.key),
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       hintText: 'Password your email.')),
@@ -98,17 +108,23 @@ class _SignupState extends State<Signup> {
                     style: TextStyle(fontSize: 15.0)),
               ),
               MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
+                      _loading = true;
                       username = _usernameController.value.text;
                       email = _emailController.value.text;
                       password = _passwordController.value.text;
                     });
-                    signup();
+                    await signup(username, email, password);
+                    _loading = false;
                   },
                   color: Colors.blue,
-                  child: const Text('Login',
-                      style: TextStyle(fontSize: 16.0, color: Colors.white))),
+                  child: _loading
+                      ? const Text('Loading',
+                          style: TextStyle(fontSize: 16.0, color: Colors.white))
+                      : const Text('Singup',
+                          style:
+                              TextStyle(fontSize: 16.0, color: Colors.white)))
             ],
           )),
     );
