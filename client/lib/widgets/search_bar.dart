@@ -31,6 +31,9 @@ class SearchBar extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
                       child: TextFormField(
+                          onChanged: (value) {
+                            print(value);
+                          },
                           controller: _textController,
                           obscureText: false,
                           decoration: const InputDecoration(

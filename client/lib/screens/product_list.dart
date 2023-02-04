@@ -14,23 +14,14 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   TextEditingController? _textController;
-  List<dynamic> products = [];
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      products = await getProducts();
-    });
-  }
-
-  Future<List<dynamic>> getProducts() async {
+  Future<List<dynamic>> loadProducts() async {
     try {
       Uri uri = Uri.parse(dotenv.get('PROVIDER_API'));
       Response response = await get(uri);
-      return products = await jsonDecode(response.body);
+      List<dynamic> data = await jsonDecode(response.body);
+      return data;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -49,15 +40,28 @@ class _ProductListState extends State<ProductList> {
                       TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold))),
           SearchBar(textController: _textController),
           Expanded(
-            child: GridView.builder(
-                itemCount: products.isNotEmpty ? products.length : 0,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) => ProductCard(
-                    name: products[index]['nome'],
-                    picture: products[index]['imagem'],
-                    price: products[index]['preco'])),
-          )
+              child: FutureBuilder<List<dynamic>>(
+                  future: loadProducts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasData) {
+                      List<dynamic> products = snapshot.data!;
+
+                      return GridView.builder(
+                          itemCount: products.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2),
+                          itemBuilder: (context, index) => ProductCard(
+                              name: products[index]['nome'],
+                              picture: products[index]['imagem'],
+                              price: products[index]['preco']));
+                    }
+
+                    return const Center(
+                        child: Text('Ooops, something went wrong.'));
+                  }))
         ])));
   }
 }
