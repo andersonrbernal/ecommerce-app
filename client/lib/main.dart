@@ -17,15 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const ProductList(),
-        '/login': (context) => const Login(),
-        '/signup': (context) => const Signup(),
-        '/cart': (context) => const Cart(),
-        '/purchases': (context) => const Purchases()
-      },
-    );
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const ProductList(),
+          '/login': (context) => const Login(),
+          '/signup': (context) => const Signup(),
+          '/cart': (context) => const Cart(),
+          '/purchases': (context) => const Purchases()
+        });
   }
 }

@@ -1,13 +1,19 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({
-    Key? key,
-    required TextEditingController? textController,
-  })  : _textController = textController,
-        super(key: key);
+class SearchBar extends StatefulWidget {
+  const SearchBar(
+      {super.key, required this.onSearch, required this.onItemFound});
 
-  final TextEditingController? _textController;
+  final Function onSearch;
+  final void Function(List<dynamic> list) onItemFound;
+
+  @override
+  State<SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  TextEditingController textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +37,11 @@ class SearchBar extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
                       child: TextFormField(
-                          onChanged: (value) {
-                            print(value);
+                          onChanged: (value) async {
+                            var items = await widget.onSearch(value);
+                            widget.onItemFound(items);
                           },
-                          controller: _textController,
+                          controller: textController,
                           obscureText: false,
                           decoration: const InputDecoration(
                               labelText: 'Search product here...',
