@@ -6,9 +6,9 @@ class Auth {
   late String endpoint;
   late Map<String, String> requestBody;
 
-  final String _server = dotenv.get('SERVER_API');
+  static final String _server = dotenv.get('SERVER_API');
 
-  final Map<String, String> _headers = {
+  static final Map<String, String> _headers = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 

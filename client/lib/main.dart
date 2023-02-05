@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/purchases',
+        theme: ThemeData(fontFamily: 'Poppins'),
+        initialRoute: '/',
         routes: {
           '/': (context) => const ProductList(),
           '/login': (context) => const Login(),

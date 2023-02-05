@@ -9,7 +9,9 @@ class Cart extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
-            title: const Text('Cart', style: TextStyle(color: Colors.black)),
+            title: const Text('Cart'),
+            toolbarTextStyle: const TextStyle(color: Colors.black),
+            iconTheme: const IconThemeData(color: Colors.black),
             backgroundColor: Colors.white),
         body: Container(
             margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5.0),
@@ -19,7 +21,7 @@ class Cart extends StatelessWidget {
                 primary: false,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                itemCount: 8,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   return const ProductOnCart();
                 })),
