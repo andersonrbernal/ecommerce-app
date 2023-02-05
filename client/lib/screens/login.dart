@@ -1,9 +1,7 @@
+import 'package:client/models/user.dart';
 import 'package:client/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'dart:convert';
-
-import 'package:http/http.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,45 +11,39 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _sessionManager = SessionManager();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool _loading = false;
   String errorMessage = '';
 
-  late String email;
-  late String password;
-
   Future<void> login(String email, String password) async {
-    errorMessage = '';
+    try {
+      var data = await Auth.login(email, password);
 
-    Map<String, String> requestBody = {'email': email, 'password': password};
-    Auth auth = Auth(endpoint: 'auth/login', requestBody: requestBody);
-    Response response = await auth.login();
-    Map<String, dynamic> data = await jsonDecode(response.body);
+      if (data['success'] == false) {
+        setState(() => errorMessage = data['errors'].values.first);
+        return;
+      }
 
-    bool responseNotOk = response.statusCode != 200;
-    if (responseNotOk) {
-      Map errors = data['errors'];
-
-      setState(() => errorMessage = errors.values.first);
+      var user = User(data['token']);
+      print(user.getUserId());
+    } catch (e) {
+      setState(
+          () => errorMessage = "We could not get response from our server.");
       return;
     }
-
-    await _sessionManager.set('token', data['token']);
     return;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        resizeToAvoidBottomInset: false,
+        body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
                 Text('Login', style: TextStyle(fontSize: 30.0))
               ]),
@@ -92,13 +84,12 @@ class _LoginState extends State<Login> {
               ),
               MaterialButton(
                   onPressed: () async {
-                    setState(() {
-                      _loading = true;
-                      email = _emailController.value.text;
-                      password = _passwordController.value.text;
-                    });
-                    await login(email, password);
-                    _loading = false;
+                    setState((() => _loading = true));
+
+                    await login(
+                        _emailController.text, _passwordController.text);
+
+                    setState((() => _loading = false));
                   },
                   color: Colors.blue,
                   child: _loading
@@ -107,8 +98,6 @@ class _LoginState extends State<Login> {
                       : const Text('Login',
                           style:
                               TextStyle(fontSize: 16.0, color: Colors.white)))
-            ],
-          )),
-    );
+            ])));
   }
 }

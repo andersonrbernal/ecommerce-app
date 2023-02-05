@@ -32,7 +32,6 @@ class AuthController {
 
             const token = await createToken(user._doc._id)
 
-
             res.status(200).json({ success: true, token: token, data: otherDetails })
             return
         } catch (error) {

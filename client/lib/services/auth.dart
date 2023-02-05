@@ -3,29 +3,48 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 class Auth {
-  late String endpoint;
-  late Map<String, String> requestBody;
-
   static final String _server = dotenv.get('SERVER_API');
 
   static final Map<String, String> _headers = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  Auth({required this.endpoint, required this.requestBody});
+  Auth();
 
-  Future<Response> login() async {
-    String url = '$_server/$endpoint';
+  static Future<Map<String, dynamic>> login(
+    String email,
+    String password,
+  ) async {
+    String url = '$_server/auth/login';
+
+    Map<String, String> requestBody = {
+      'email': email,
+      'password': password,
+    };
 
     Response response = await post(Uri.parse(url),
         headers: _headers, body: jsonEncode(requestBody));
-    return response;
+    Map<String, dynamic> data = await jsonDecode(response.body);
+    return data;
   }
 
-  Future<Response> signup() async {
-    String url = '$_server/$endpoint';
+  static Future<Map<String, dynamic>> signup(
+    String username,
+    String email,
+    String password,
+  ) async {
+    String url = '$_server/auth/register';
+
+    Map<String, String> requestBody = {
+      'email': email,
+      'password': password,
+      'username': username
+    };
+
     Response response = await post(Uri.parse(url),
         headers: _headers, body: jsonEncode(requestBody));
-    return response;
+    Map<String, dynamic> data = await jsonDecode(response.body);
+
+    return data;
   }
 }
