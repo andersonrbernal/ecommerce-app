@@ -16,22 +16,34 @@ class Provider {
     }
   }
 
-  Future<List<dynamic>> searchProducts(String value) async {
-    List<dynamic> products = await getProducts();
-    List<dynamic> matchQuery = [];
-
-    matchQuery = products.where((product) {
-      bool productOnlyIfItStartWithTheTypedValue = product['nome']
-          .toString()
-          .toLowerCase()
-          .startsWith(value.toLowerCase());
-
-      return productOnlyIfItStartWithTheTypedValue;
-    }).toList();
-    return matchQuery;
+  Future<List<dynamic>> findProduct(String index) async {
+    Uri uri = Uri.parse("$_providerAPI/$index");
+    try {
+      Response response = await get(uri);
+      List<dynamic> product = await jsonDecode(response.body);
+      return product;
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<List<dynamic>> updateProducts(List<dynamic> items) async {
-    return items;
+  Future<List<dynamic>> searchProducts(String value) async {
+    List<dynamic> products;
+    List<dynamic> matchQuery = [];
+
+    try {
+      products = await getProducts();
+      matchQuery = products.where((product) {
+        bool productOnlyIfItStartWithTheTypedValue = product['nome']
+            .toString()
+            .toLowerCase()
+            .startsWith(value.toLowerCase());
+
+        return productOnlyIfItStartWithTheTypedValue;
+      }).toList();
+    } catch (e) {
+      rethrow;
+    }
+    return matchQuery;
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatefulWidget {
-  final String picture;
-  final String name;
-  final String price;
-
   const ProductCard(
       {super.key,
       required this.name,
       required this.picture,
       required this.price});
+
+  final String name;
+  final String picture;
+  final String price;
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -67,7 +67,6 @@ class _ProductCardState extends State<ProductCard> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                    // mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -75,14 +74,7 @@ class _ProductCardState extends State<ProductCard> {
                         style: const TextStyle(
                             color: Colors.black, overflow: TextOverflow.fade),
                       ),
-                      TextButton(
-                          onPressed: () {
-                            print('hi');
-                          },
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.purple),
-                          child: const Text('Buy',
-                              style: TextStyle(color: Colors.white)))
+                      const Text('Buy', style: TextStyle(color: Colors.white))
                     ]),
               )
             ])));

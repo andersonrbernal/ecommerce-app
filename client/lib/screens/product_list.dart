@@ -24,6 +24,6 @@ class _ProductListState extends State<ProductList> {
                 showSearch(context: context, delegate: DataSearch());
               })
         ]),
-        body: ProductGridView(provider: provider, value: ''));
+        body: ProductGridView(provider: provider));
   }
 }
