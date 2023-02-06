@@ -1,7 +1,8 @@
 import 'package:client/models/user.dart';
 import 'package:client/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,31 +14,34 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _storage = SessionManager();
+  late User user;
 
   bool _loading = false;
   String errorMessage = '';
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
+    _storage.destroy();
     try {
       var data = await Auth.login(email, password);
 
       if (data['success'] == false) {
         setState(() => errorMessage = data['errors'].values.first);
-        return;
+        return false;
       }
-
-      var user = User(data['token']);
-      print(user.getUserId());
+      await _storage.set("token", data['token']);
+      return true;
     } catch (e) {
       setState(
           () => errorMessage = "We could not get response from our server.");
-      return;
+      return false;
     }
-    return;
   }
 
   @override
   Widget build(BuildContext context) {
+    user = Provider.of(context);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Padding(
@@ -77,7 +81,7 @@ class _LoginState extends State<Login> {
               const SizedBox(height: 20.0),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/signup');
+                  Navigator.popAndPushNamed(context, '/signup');
                 },
                 child: const Text('New User? Create an account',
                     style: TextStyle(fontSize: 15.0)),
@@ -86,8 +90,15 @@ class _LoginState extends State<Login> {
                   onPressed: () async {
                     setState((() => _loading = true));
 
-                    await login(
-                        _emailController.text, _passwordController.text);
+                    bool isLoggedIn = await login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                    if (isLoggedIn) {
+                      String jwt = await _storage.get('token');
+                      user.token = jwt.toString();
+                      Navigator.pushReplacementNamed(context, '/products');
+                    }
 
                     setState((() => _loading = false));
                   },

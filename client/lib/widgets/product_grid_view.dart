@@ -1,20 +1,21 @@
-import 'package:client/services/provider.dart';
+import 'package:client/services/product_provider.dart';
 import 'package:client/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 
 class ProductGridView extends StatelessWidget {
-  const ProductGridView({Key? key, required this.provider, this.value = ''})
+  const ProductGridView(
+      {Key? key, required this.productProvider, this.value = ''})
       : super(key: key);
 
-  final Provider provider;
+  final ProductProvider productProvider;
   final String value;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
         future: value.isEmpty
-            ? provider.getProducts()
-            : provider.searchProducts(value),
+            ? productProvider.getProducts()
+            : productProvider.searchProducts(value),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

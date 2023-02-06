@@ -9,8 +9,6 @@ class Auth {
     'Content-Type': 'application/json; charset=UTF-8'
   };
 
-  Auth();
-
   static Future<Map<String, dynamic>> login(
     String email,
     String password,

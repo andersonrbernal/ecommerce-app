@@ -1,6 +1,8 @@
 import 'package:client/models/user.dart';
 import 'package:client/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -13,30 +15,34 @@ class _SignupState extends State<Signup> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _storage = SessionManager();
+  late User user;
 
   bool _loading = false;
   String errorMessage = '';
 
-  Future<void> signup(String username, String email, String password) async {
+  Future<bool> signup(String username, String email, String password) async {
+    _storage.destroy();
     try {
       var data = await Auth.signup(username, email, password);
 
       if (data['success'] == false) {
-        print(data['errors'].values.first);
         setState(() => errorMessage = data['errors'].values.first);
-        return;
+        return false;
       }
-      var user = User(data['token']);
+      await _storage.set("token", data['token']);
+      return true;
     } catch (e) {
       setState(
           () => errorMessage = "We could not get response from our server.");
-      return;
+      return false;
     }
-    return;
   }
 
   @override
   Widget build(BuildContext context) {
+    user = Provider.of(context);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Padding(
@@ -85,7 +91,7 @@ class _SignupState extends State<Signup> {
               const SizedBox(height: 20.0),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login');
+                  Navigator.popAndPushNamed(context, '/login');
                 },
                 child: const Text('Already have an account? Login',
                     style: TextStyle(fontSize: 15.0)),
@@ -94,11 +100,16 @@ class _SignupState extends State<Signup> {
                   onPressed: () async {
                     setState((() => _loading = true));
 
-                    await signup(
+                    bool isLoggedIn = await signup(
                       _usernameController.text,
                       _emailController.text,
                       _passwordController.text,
                     );
+                    if (isLoggedIn) {
+                      String jwt = await _storage.get('token');
+                      user.token = jwt.toString();
+                      Navigator.pushReplacementNamed(context, '/products');
+                    }
 
                     setState((() => _loading = false));
                   },

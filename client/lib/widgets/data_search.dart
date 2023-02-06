@@ -1,9 +1,9 @@
-import 'package:client/services/provider.dart';
+import 'package:client/services/product_provider.dart';
 import 'package:client/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
 
 class DataSearch extends SearchDelegate<String> {
-  static Provider provider = Provider();
+  static ProductProvider productProvider = ProductProvider();
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -22,7 +22,7 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return ProductGridView(provider: provider, value: query);
+    return ProductGridView(productProvider: productProvider, value: query);
   }
 
   @override
@@ -34,7 +34,7 @@ class DataSearch extends SearchDelegate<String> {
     }
 
     return FutureBuilder(
-        future: provider.searchProducts(query),
+        future: productProvider.searchProducts(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

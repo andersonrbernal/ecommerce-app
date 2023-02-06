@@ -1,21 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 
-class User extends ChangeNotifier {
-  String token;
+class User with ChangeNotifier {
+  late String _token;
 
-  User(this.token);
+  User(this._token);
 
-  String get() {
-    return token;
-  }
+  String get token => _token;
 
-  update(String token) {
-    this.token = token;
-  }
-
-  String getUserId() {
-    Map<String, dynamic> userId = JwtDecoder.decode(token);
-    return userId['id'];
+  set token(String token) {
+    _token = token;
+    notifyListeners();
   }
 }

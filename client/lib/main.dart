@@ -1,3 +1,4 @@
+import 'package:client/models/user.dart';
 import 'package:client/screens/cart.dart';
 import 'package:client/screens/login.dart';
 import 'package:client/screens/product_list.dart';
@@ -5,10 +6,14 @@ import 'package:client/screens/purchases.dart';
 import 'package:client/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<User>(
+    create: (context) => User(''),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +26,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Poppins'),
         initialRoute: '/login',
         routes: {
-          '/': (context) => const ProductList(),
+          '/products': (context) => const ProductList(),
           '/login': (context) => const Login(),
           '/signup': (context) => const Signup(),
           '/cart': (context) => const Cart(),
