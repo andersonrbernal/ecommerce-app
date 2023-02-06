@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 
-class ProductOnCart extends StatelessWidget {
+class ProductOnCart extends StatefulWidget {
   const ProductOnCart({
     Key? key,
+    required this.name,
+    required this.price,
+    required this.picture,
   }) : super(key: key);
 
+  final String name;
+  final String price;
+  final String picture;
+
+  @override
+  State<ProductOnCart> createState() => _ProductOnCartState();
+}
+
+class _ProductOnCartState extends State<ProductOnCart> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -24,19 +36,16 @@ class ProductOnCart extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.asset('assets/foto.jpg',
+              Image.network(widget.picture,
                   height: 80, width: 80, fit: BoxFit.contain),
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('name',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.clip)),
-                    Text('\$0.00'),
-                    Text('product id')
-                  ]),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(widget.name,
+                    style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.clip)),
+                Text('\$${widget.price}'),
+              ]),
               IconButton(
                   onPressed: () {},
                   icon: const Icon(Icons.delete, color: Colors.red))

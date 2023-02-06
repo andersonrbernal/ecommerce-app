@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class User with ChangeNotifier {
   late String _token;
@@ -10,5 +11,10 @@ class User with ChangeNotifier {
   set token(String token) {
     _token = token;
     notifyListeners();
+  }
+
+  String get id {
+    Map<String, dynamic> jwt = JwtDecoder.decode(_token);
+    return jwt['id'];
   }
 }

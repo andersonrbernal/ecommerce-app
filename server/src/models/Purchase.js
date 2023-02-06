@@ -1,17 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import fetch from 'node-fetch'
 
-// {
-//     nome: 'Sleek Cotton Mouse',
-//     descricao: 'The Apollotech B340 is an affordable wireless mouse with reliable connectivity, 12 months battery life and modern design',
-//     categoria: 'Awesome',
-//     imagem: 'https://loremflickr.com/640/480/business',
-//     preco: '159.00',
-//     material: 'Wooden',
-//     departamento: 'Toys',
-//     id: '73'
-// }
-
 async function triggerPurchaseAfter(_doc, next) {
     try {
         const response = await fetch(process.env.PROVIDER_API)

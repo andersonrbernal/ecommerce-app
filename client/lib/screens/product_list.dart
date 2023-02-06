@@ -3,7 +3,6 @@ import 'package:client/services/product_provider.dart';
 import 'package:client/widgets/data_search.dart';
 import 'package:client/widgets/product_grid_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 class ProductList extends StatefulWidget {
@@ -15,13 +14,14 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   late User user;
+  late String uid;
 
   ProductProvider productProvider = ProductProvider();
 
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
-    print(user.token);
+    uid = user.id;
 
     return Consumer<User>(builder: (context, user, child) {
       return Scaffold(
