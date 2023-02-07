@@ -1,6 +1,6 @@
 import 'package:client/models/user.dart';
 import 'package:client/services/cart_service.dart';
-import 'package:client/widgets/product_on_cart.dart';
+import 'package:client/widgets/product_item.dart';
 import 'package:client/widgets/purchase_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,9 @@ class _CartState extends State<Cart> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("Your cart is empty."));
+                    return const Center(
+                        child: Text("Your cart is empty.",
+                            style: TextStyle(fontSize: 18.0)));
                   } else if (snapshot.hasData) {
                     var cartItemsList = snapshot.data!;
                     return ListView.builder(
@@ -79,13 +81,12 @@ class _CartState extends State<Cart> {
             future: cartService.getCart(),
             builder: (context, snapshot) {
               late int total;
-
               if (snapshot.hasData) {
                 total = snapshot.data!['total'];
                 return PurchaseButton(total: total.toDouble());
               }
 
-              return const PurchaseButton(total: 0);
+              return const PurchaseButton(total: 0.00);
             }));
   }
 }

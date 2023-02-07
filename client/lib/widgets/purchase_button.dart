@@ -17,7 +17,8 @@ class PurchaseButton extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () {},
-                      child: Text('Checkout (${total.toString()})',
+                      child: Text(
+                          'Checkout (\$${total.toStringAsFixed(2).toString()})',
                           style: const TextStyle(
                               color: Colors.white, fontSize: 23.0)))
                 ])));
