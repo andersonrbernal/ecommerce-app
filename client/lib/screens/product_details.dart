@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
-  const ProductDetails({super.key});
+  const ProductDetails({super.key, required this.product});
 
+  final Map<String, dynamic> product;
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  late Map<String, dynamic> product;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              product['name'],
+              widget.product['nome'],
               style: const TextStyle(color: Colors.black),
             ),
+            iconTheme: const IconThemeData(color: Colors.black),
             centerTitle: true,
             backgroundColor: Colors.transparent,
             elevation: 0),
@@ -28,16 +28,22 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
                   alignment: Alignment.center,
-                  child: Image.network(product['imagem'])),
-              Text(product['nome'], style: const TextStyle(fontSize: 24.0)),
-              Text(product['preco'], style: const TextStyle(fontSize: 18.0)),
-              Text(product['descricao'], style: const TextStyle(fontSize: 16.0))
+                  child: Hero(
+                    tag: widget.product['id'],
+                    child: Image.network(widget.product['imagem']),
+                  )),
+              Text(widget.product['nome'],
+                  style: const TextStyle(fontSize: 24.0)),
+              Text(widget.product['preco'],
+                  style: const TextStyle(fontSize: 18.0)),
+              Text(widget.product['descricao'],
+                  style: const TextStyle(fontSize: 16.0))
             ]),
           ),
         ),
         bottomNavigationBar: ElevatedButton(
             onPressed: () {
-              print(product['id']);
+              print(widget.product['id']);
             },
             style: ElevatedButton.styleFrom(
                 fixedSize: const Size.fromHeight(70.0),

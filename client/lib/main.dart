@@ -1,7 +1,6 @@
 import 'package:client/models/user.dart';
 import 'package:client/screens/cart.dart';
 import 'package:client/screens/login.dart';
-import 'package:client/screens/product_details.dart';
 import 'package:client/screens/product_list.dart';
 import 'package:client/screens/purchases.dart';
 import 'package:client/screens/signup.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
           '/signup': (context) => const Signup(),
           '/cart': (context) => const Cart(),
           '/purchases': (context) => const Purchases(),
-          '/product_details': (context) => const ProductDetails()
+          // '/product_details': (context) => const ProductDetails()
         });
   }
 }
