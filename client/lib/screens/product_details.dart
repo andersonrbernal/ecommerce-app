@@ -8,20 +8,14 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  late String name;
-
-  late String price;
-
-  late String description;
-
-  late String picture;
+  late Map<String, dynamic> product;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              name,
+              product['name'],
               style: const TextStyle(color: Colors.black),
             ),
             centerTitle: true,
@@ -33,15 +27,18 @@ class _ProductDetailsState extends State<ProductDetails> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
-                  alignment: Alignment.center, child: Image.network(picture)),
-              Text(name, style: const TextStyle(fontSize: 24.0)),
-              Text(price, style: const TextStyle(fontSize: 18.0)),
-              Text(description, style: const TextStyle(fontSize: 16.0))
+                  alignment: Alignment.center,
+                  child: Image.network(product['imagem'])),
+              Text(product['nome'], style: const TextStyle(fontSize: 24.0)),
+              Text(product['preco'], style: const TextStyle(fontSize: 18.0)),
+              Text(product['descricao'], style: const TextStyle(fontSize: 16.0))
             ]),
           ),
         ),
         bottomNavigationBar: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              print(product['id']);
+            },
             style: ElevatedButton.styleFrom(
                 fixedSize: const Size.fromHeight(70.0),
                 backgroundColor: Colors.deepPurple,
