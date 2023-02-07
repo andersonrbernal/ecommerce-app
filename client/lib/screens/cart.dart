@@ -1,5 +1,7 @@
 import 'package:client/models/user.dart';
+import 'package:client/services/cart_service.dart';
 import 'package:client/widgets/product_on_cart.dart';
+import 'package:client/widgets/purchase_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,7 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
     uid = user.id;
+    CartService cartService = CartService(uid);
 
     return Scaffold(
         backgroundColor: Colors.grey[100],
@@ -34,32 +37,63 @@ class _CartState extends State<Cart> {
         body: Container(
             margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5.0),
             alignment: Alignment.center,
-            child: ListView.builder(
-                padding: EdgeInsets.zero,
-                primary: false,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return const ProductOnCart(
-                    name: 'product',
-                    picture:
-                        'https://loremflickr.com/cache/resized/65535_50361596851_4b40f7475b_b_640_480_nofilter.jpg',
-                    price: '0.00',
-                  );
+            child: FutureBuilder<List>(
+                future: cartService.getCartProducts(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError || snapshot.data!.isEmpty) {
+                    return const Center(child: Text("Your cart is empty."));
+                  } else if (snapshot.hasData) {
+                    var cartItemsList = snapshot.data!;
+                    return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        primary: false,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: cartItemsList.length,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                              key: Key(index.toString()),
+                              background: Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.red),
+                              ),
+                              onDismissed: (direction) {
+                                removeProduct(
+                                    cartService, cartItemsList[index]['id']);
+                                setState(() {
+                                  cartItemsList.removeAt(index);
+                                });
+                              },
+                              child: ProductItem(
+                                cartItemsList: cartItemsList,
+                                index: index,
+                              ));
+                        });
+                  }
+                  return const Center(
+                      child: Text('Ooops, something went wrong.'));
                 })),
-        bottomSheet: Container(
-            height: 70,
-            decoration: const BoxDecoration(color: Colors.deepPurple),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  TextButton(
-                      onPressed: () {},
-                      child: const Text('Checkout (\$0.00)',
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 23.0)))
-                ])));
+        bottomNavigationBar: FutureBuilder(
+            future: cartService.getCart(),
+            builder: (context, snapshot) {
+              late int total;
+
+              if (snapshot.hasData) {
+                total = snapshot.data!['total'];
+                return PurchaseButton(total: total.toDouble());
+              }
+
+              return const PurchaseButton(total: 0);
+            }));
+  }
+}
+
+Future<void> removeProduct(CartService cartService, String productId) async {
+  try {
+    await cartService.removeProduct(int.parse(productId));
+  } catch (e) {
+    rethrow;
   }
 }

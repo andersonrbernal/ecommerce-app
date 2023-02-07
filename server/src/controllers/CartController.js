@@ -5,8 +5,16 @@ class CartController {
         const { id: uid } = req.params
 
         try {
+            const response = await fetch(process.env.PROVIDER_API)
+            const products = await response.json()
             const cart = await User.findOne({ _id: uid }, { cart: 1 })
-            res.status(200).json({ success: true, data: cart })
+            let total = 0.00;
+
+            products.forEach(product => {
+                cart.cart.includes(product.id) ? total += parseFloat(product.preco) : null
+            })
+
+            res.status(200).json({ success: true, data: { _id: cart._id, cart: cart.cart, total: total } })
             return
         } catch (error) {
             res.status(500).json({ success: false, errors: { data: error.message } })

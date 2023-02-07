@@ -26,14 +26,11 @@ class ProductGridView extends StatelessWidget {
                 itemCount: products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2),
-                itemBuilder: (context, index) => Hero(
-                      tag: 'product_${index.toString()}',
-                      child: ProductCard(
-                          key: key,
-                          name: products[index]['nome'],
-                          picture: products[index]['imagem'],
-                          price: products[index]['preco']),
-                    ));
+                itemBuilder: (context, index) => ProductCard(
+                    key: key,
+                    name: products[index]['nome'],
+                    picture: products[index]['imagem'],
+                    price: products[index]['preco']));
           }
 
           return const Center(child: Text('Ooops, something went wrong.'));
