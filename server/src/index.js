@@ -7,7 +7,7 @@ import userRoute from './routes/userRoute.js'
 import authRoute from './routes/authRoute.js'
 import cartRoute from './routes/cartRoute.js'
 import purchaseRoute from './routes/purchaseRoute.js'
-import { checkUser, requireAuth } from './libs/middlewares/authMiddleware.js'
+import productRoute from './routes/productRoute.js'
 
 const app = express()
 
@@ -31,3 +31,4 @@ app.use('/user', userRoute)
 app.use('/auth', authRoute)
 app.use('/cart', cartRoute)
 app.use('/purchase', purchaseRoute)
+app.use('/products', productRoute)

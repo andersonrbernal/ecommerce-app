@@ -1,16 +1,29 @@
+import 'package:client/models/user.dart';
+import 'package:client/services/cart_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key, required this.product});
 
   final Map<String, dynamic> product;
+
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  late CartService cartService;
+  late User user;
+  late String uid;
+  late bool isProductInCart;
+
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<User>(context);
+    uid = user.id;
+    cartService = CartService(uid);
+
     return Scaffold(
         appBar: AppBar(
             title: Text(
@@ -42,8 +55,10 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
         ),
         bottomNavigationBar: ElevatedButton(
-            onPressed: () {
-              print(widget.product['id']);
+            onPressed: () async {
+              var data =
+                  await cartService.updateCart(int.parse(widget.product['id']));
+              print(data);
             },
             style: ElevatedButton.styleFrom(
                 fixedSize: const Size.fromHeight(70.0),

@@ -36,14 +36,14 @@ class CartService {
     }
   }
 
-  Future<List<dynamic>> updateCart(List<dynamic> items) async {
-    String requestBody = jsonEncode(items);
+  Future<Map<String, dynamic>> updateCart(int productId) async {
+    String requestBody = jsonEncode({'productId': productId});
     String url = '$_server/$_userId';
 
     try {
       Response response =
           await put(Uri.parse(url), headers: _headers, body: requestBody);
-      List<dynamic> data = await jsonDecode(response.body);
+      Map<String, dynamic> data = await jsonDecode(response.body);
       return data;
     } catch (e) {
       rethrow;
@@ -62,8 +62,8 @@ class CartService {
     }
   }
 
-  Future<bool> removeProduct(int id) async {
-    String requestBody = jsonEncode({'productId': id});
+  Future<bool> removeProduct(int productId) async {
+    String requestBody = jsonEncode({'productId': productId});
     String url = '$_server/$_userId';
 
     try {
@@ -74,6 +74,20 @@ class CartService {
       );
       Map<String, dynamic> data = await jsonDecode(response.body);
       return data['success'];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isProductInCart(int productId) async {
+    String url = '$_server/$_userId';
+
+    try {
+      Response response = await get(Uri.parse(url), headers: _headers);
+      Map<String, dynamic> data = await jsonDecode(response.body);
+      List cart = data['data']['cart'];
+      bool isProductInCart = cart.contains(productId);
+      return isProductInCart;
     } catch (e) {
       rethrow;
     }
