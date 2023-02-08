@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
           '/signup': (context) => const Signup(),
           '/cart': (context) => const Cart(),
           '/purchases': (context) => const Purchases(),
-          // '/product_details': (context) => const ProductDetails()
         });
   }
 }

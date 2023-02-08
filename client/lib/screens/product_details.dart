@@ -18,6 +18,9 @@ class _ProductDetailsState extends State<ProductDetails> {
   late String uid;
   late bool isProductInCart;
 
+  Color buttonStyle = Colors.deepPurple;
+  String buttonText = "Add to Cart";
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
@@ -56,15 +59,31 @@ class _ProductDetailsState extends State<ProductDetails> {
         ),
         bottomNavigationBar: ElevatedButton(
             onPressed: () async {
-              var data =
+              Map<String, dynamic> data =
                   await cartService.updateCart(int.parse(widget.product['id']));
-              print(data);
+              bool isProductInCart = await cartService
+                  .isProductInCart(int.parse(widget.product['id']));
+
+              if (data['success']) {
+                if (isProductInCart) {
+                  setState(() {
+                    buttonStyle = Colors.grey[600]!;
+                    buttonText = "Remove from Cart";
+                  });
+                  return;
+                }
+
+                setState(() {
+                  buttonStyle = Colors.deepPurple;
+                  buttonText = "Add to Cart";
+                });
+              }
             },
             style: ElevatedButton.styleFrom(
                 fixedSize: const Size.fromHeight(70.0),
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: buttonStyle,
                 elevation: 0),
-            child: const Text('Add to Cart',
-                style: TextStyle(color: Colors.white, fontSize: 18.0))));
+            child: Text(buttonText,
+                style: const TextStyle(color: Colors.white, fontSize: 18.0))));
   }
 }
