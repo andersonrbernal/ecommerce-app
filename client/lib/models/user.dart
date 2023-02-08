@@ -17,4 +17,19 @@ class User with ChangeNotifier {
     Map<String, dynamic> jwt = JwtDecoder.decode(_token);
     return jwt['id'];
   }
+
+  String get username {
+    Map<String, dynamic> jwt = JwtDecoder.decode(_token);
+    return jwt['username'];
+  }
+
+  String get email {
+    Map<String, dynamic> jwt = JwtDecoder.decode(_token);
+    return jwt['email'];
+  }
+
+  void reset() {
+    _token = '';
+    notifyListeners();
+  }
 }

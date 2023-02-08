@@ -2,7 +2,7 @@ import 'package:client/models/user.dart';
 import 'package:client/screens/cart.dart';
 import 'package:client/screens/login.dart';
 import 'package:client/screens/product_list.dart';
-import 'package:client/screens/purchases.dart';
+import 'package:client/screens/purchase_list.dart';
 import 'package:client/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const Login(),
           '/signup': (context) => const Signup(),
           '/cart': (context) => const Cart(),
-          '/purchases': (context) => const Purchases(),
+          '/purchases': (context) => const PurchaseList(),
         });
   }
 }

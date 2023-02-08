@@ -2,8 +2,8 @@ import User from "../models/User.js"
 import jwt from 'jsonwebtoken'
 import { handleErrors } from "../libs/utilities/handleErrors.js"
 
-async function createToken(id) {
-    const token = jwt.sign({ id }, process.env.SECRET, { expiresIn: 259200000 });
+async function createToken(id, username, email) {
+    const token = jwt.sign({ id, username, email }, process.env.SECRET, { expiresIn: 259200000 });
     return token
 }
 
@@ -13,7 +13,7 @@ class AuthController {
             const user = await new User(req.body).save()
             const { password: userPassword, ...otherDetails } = user._doc
 
-            const token = await createToken(user._doc._id)
+            const token = await createToken(user._doc._id, user._doc.username, user._doc.email)
 
             res.status(200).json({ success: true, token: token, data: otherDetails })
             return
@@ -30,7 +30,7 @@ class AuthController {
             const user = await User.login(email, password)
             const { password: userPassword, ...otherDetails } = user._doc
 
-            const token = await createToken(user._doc._id)
+            const token = await createToken(user._doc._id, user._doc.username, user._doc.email)
 
             res.status(200).json({ success: true, token: token, data: otherDetails })
             return
