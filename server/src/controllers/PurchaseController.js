@@ -48,6 +48,9 @@ class PurchaseController {
 
             const purchase = new Purchase({ userId: user._id, cart: user.cart })
             await purchase.save()
+            await User.findByIdAndUpdate(user._id, { $unset: { cart: [] } })
+
+            console.log(await User.findById(user._id))
 
             const savedPurchase = await Purchase.findById(purchase._id)
 
