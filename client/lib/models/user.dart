@@ -27,9 +27,4 @@ class User with ChangeNotifier {
     Map<String, dynamic> jwt = JwtDecoder.decode(_token);
     return jwt['email'];
   }
-
-  void reset() {
-    _token = '';
-    notifyListeners();
-  }
 }

@@ -22,10 +22,14 @@ class _PurchaseListState extends State<PurchaseList> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Purchases"),
+          title: const Text("Purchases", style: TextStyle(fontSize: 20.0)),
           centerTitle: true,
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+          elevation: 0,
+          toolbarTextStyle: const TextStyle(color: Colors.black),
+          titleTextStyle: const TextStyle(color: Colors.black),
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
-        // drawer: ,
         body: FutureBuilder(
             future: PurchaseService.getUserPurchases(uid),
             builder: (context, snapshot) {

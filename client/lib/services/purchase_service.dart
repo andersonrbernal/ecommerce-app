@@ -20,4 +20,16 @@ class PurchaseService {
       rethrow;
     }
   }
+
+  static Future<Map<String, dynamic>> registerPurchase(String userId) async {
+    Uri uri = Uri.parse('$_server/register/$userId');
+
+    try {
+      Response response = await post(uri, headers: _headers);
+      Map<String, dynamic> data = await jsonDecode(response.body);
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
