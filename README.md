@@ -13,6 +13,18 @@ I have build this mobile app to enhance my skills as a software engineer. I have
 This project was made using Flutter, Node.js and MongoDB.
 Meaning that, if you want to run this project, you'll have to have Node.js installed in your machine as long as MongoDB, and Flutter.
 
+### Enviroment Variables
+```
+Change the name of all files .env.example to .env
+Client:
+Note that the client has two enviroment variables. It needs the server API and the provider API.
+You don't need to touch the url for the PROVIDER_API, but change the port number for SERVER_API to match the port number of the server that you are going to settle.
+
+Server:
+Update DB_URI and PORT to the matching url and port number of your mongoDB database.
+The secret is just a password for JWT authentication. You don't need to change it if you want to run this project.
+```
+
 ### Running the app
 
 ```
@@ -50,15 +62,3 @@ You'll need it for the project to run correctly.
 
 https://www.mongodb.com/try/download/compass
 ```
-
-### Enviroment Variables
-```
-Change the name of all files .env.example to .env
-Client:
-Note that the client needs two enviroment variables. It needs the server API and the provider API.
-You don't need to touch the url for the server API, just update the port number to match the port number of your server.
-Server:
-Update DB_URI and PORT to the matching url and port number of your mongoDB database.
-The secret is just a password for JWT authentication. You don't need to change it if you want to run this project.
-```
-
