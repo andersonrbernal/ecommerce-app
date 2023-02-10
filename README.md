@@ -22,6 +22,7 @@ You don't need to touch the url for the PROVIDER_API, but change the port number
 
 Server:
 Update DB_URI and PORT to the matching url and port number of your mongoDB database.
+WARNING: don't put the DB_URI as "mongodb://localhost:27017/example" because that will throw an error. Change to "mongodb://127.0.0.1:27017/example"
 The secret is just a password for JWT authentication. You don't need to change it if you want to run this project.
 ```
 
