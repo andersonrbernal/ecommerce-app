@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(fontFamily: 'Poppins'),
+        theme: ThemeData(
+            primaryColor: Colors.indigoAccent[700], fontFamily: 'Poppins'),
         initialRoute: '/login',
         routes: {
           '/products': (context) => const ProductList(),

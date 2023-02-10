@@ -34,7 +34,8 @@ class _PurchaseListState extends State<PurchaseList> {
             future: PurchaseService.getUserPurchases(uid),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return  Center(child: CircularProgressIndicator(
+                            color: Colors.indigoAccent[700]));
               } else if (snapshot.hasData) {
                 Map<String, dynamic> data = snapshot.data!;
                 var purchases = data['data'];

@@ -18,7 +18,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   late String uid;
   late bool isProductInCart;
 
-  Color buttonStyle = Colors.deepPurple;
+  Color buttonStyle = Colors.indigoAccent[700]!;
   String buttonText = "Add to Cart";
 
   @override
@@ -57,33 +57,34 @@ class _ProductDetailsState extends State<ProductDetails> {
             ]),
           ),
         ),
-        bottomNavigationBar: ElevatedButton(
-            onPressed: () async {
-              Map<String, dynamic> data =
-                  await cartService.updateCart(int.parse(widget.product['id']));
-              bool isProductInCart = await cartService
-                  .isProductInCart(int.parse(widget.product['id']));
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+          child: ElevatedButton(
+              onPressed: () async {
+                Map<String, dynamic> data = await cartService
+                    .updateCart(int.parse(widget.product['id']));
+                bool isProductInCart = await cartService
+                    .isProductInCart(int.parse(widget.product['id']));
 
-              if (data['success']) {
-                if (isProductInCart) {
+                if (data['success']) {
+                  if (isProductInCart) {
+                    setState(() {
+                      buttonStyle = Colors.grey[600]!;
+                      buttonText = "Remove from Cart";
+                    });
+                    return;
+                  }
+
                   setState(() {
-                    buttonStyle = Colors.grey[600]!;
-                    buttonText = "Remove from Cart";
+                    buttonStyle = Colors.indigoAccent[700]!;
+                    buttonText = "Add to Cart";
                   });
-                  return;
                 }
-
-                setState(() {
-                  buttonStyle = Colors.deepPurple;
-                  buttonText = "Add to Cart";
-                });
-              }
-            },
-            style: ElevatedButton.styleFrom(
-                fixedSize: const Size.fromHeight(70.0),
-                backgroundColor: buttonStyle,
-                elevation: 0),
-            child: Text(buttonText,
-                style: const TextStyle(color: Colors.white, fontSize: 18.0))));
+              },
+              style: ElevatedButton.styleFrom(
+                  elevation: 3.0, backgroundColor: buttonStyle),
+              child: Text(buttonText,
+                  style: const TextStyle(color: Colors.white, fontSize: 18.0))),
+        ));
   }
 }

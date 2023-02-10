@@ -32,7 +32,9 @@ class _ProductGridViewState extends State<ProductGridView> {
             : widget.productProvider.searchProducts(widget.value),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+                child:
+                    CircularProgressIndicator(color: Colors.indigoAccent[700]));
           } else if (snapshot.hasData) {
             List<dynamic> products = snapshot.data!;
 

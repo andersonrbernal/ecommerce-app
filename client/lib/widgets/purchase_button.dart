@@ -20,22 +20,26 @@ class _PurchaseButtonState extends State<PurchaseButton> {
     user = Provider.of<User>(context);
 
     return Material(
-        child: Container(
-            height: 70,
-            decoration: const BoxDecoration(color: Colors.deepPurple),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  TextButton(
-                      onPressed: () async {
-                        Navigator.of(context).popAndPushNamed('/purchases');
-                        await PurchaseService.registerPurchase(user.id);
-                      },
-                      child: Text(
-                          'Checkout (\$${widget.total.toStringAsFixed(2).toString()})',
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 23.0)))
-                ])));
+        color: Colors.transparent,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+            child: ElevatedButton(
+                onPressed: () async {
+                  Navigator.of(context).popAndPushNamed('/purchases');
+                  await PurchaseService.registerPurchase(user.id);
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigoAccent[700]),
+                child: Text(
+                    'Checkout (\$${widget.total.toStringAsFixed(2).toString()})',
+                    style:
+                        const TextStyle(color: Colors.white, fontSize: 18.0))),
+          )
+        ]));
   }
 }

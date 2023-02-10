@@ -41,7 +41,9 @@ class _CartState extends State<Cart> {
                 future: cartService.getCartProducts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: CircularProgressIndicator(
+                            color: Colors.indigoAccent[700]));
                   } else if (snapshot.hasError || snapshot.data!.isEmpty) {
                     return const Center(
                         child: Text("Your cart is empty.",

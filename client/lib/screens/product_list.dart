@@ -3,6 +3,7 @@ import 'package:client/screens/login.dart';
 import 'package:client/services/product_provider.dart';
 import 'package:client/widgets/data_search.dart';
 import 'package:client/widgets/product_grid_view.dart';
+import 'package:client/widgets/side_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,45 +50,7 @@ class _ProductListState extends State<ProductList> {
                       Navigator.pushNamed(context, '/cart');
                     }),
               ]),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(username,
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Text(email)
-                  ],
-                )),
-                ListTile(
-                  title: Row(children: const [
-                    Icon(Icons.shopping_bag),
-                    SizedBox(width: 20),
-                    Text('Purchases')
-                  ]),
-                  onTap: () => Navigator.popAndPushNamed(context, '/purchases'),
-                ),
-                ListTile(
-                    title: Row(children: const [
-                      Icon(Icons.logout),
-                      SizedBox(width: 20),
-                      Text('Log out')
-                    ]),
-                    onTap: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (_) => const Login()),
-                          (route) => false);
-                    })
-              ],
-            ),
-          ),
+          drawer: SideBar(username: username, email: email),
           body: ProductGridView(productProvider: productProvider));
     });
   }

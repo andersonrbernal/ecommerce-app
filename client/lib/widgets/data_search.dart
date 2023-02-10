@@ -37,7 +37,9 @@ class DataSearch extends SearchDelegate<String> {
         future: productProvider.searchProducts(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+                child:
+                    CircularProgressIndicator(color: Colors.indigoAccent[700]));
           } else if (snapshot.data!.isEmpty) {
             return const Center(
                 child: Text('No Results Found.',
